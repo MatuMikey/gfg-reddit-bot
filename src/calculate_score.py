@@ -14,17 +14,18 @@ logger.setLevel(logging.INFO)
 
 
 def score_users():
+    """Get fixture with status 'updated_result'."""
     # get fixture with status "updated_result"
     logger.info("Getting fixture with status `updated_result`")
-    fixture_list = list(Fixture.status_index.query("updated_result", limit = 1))
-    if len(fixture_list) > 0:
+    fixture_list = list(Fixture.status_index.query("updated_result", limit=1))
+    if fixture_list:
         f = fixture_list[0]
         logger.info("Calculating users score for the fixture result `{}`".format(f.fixture_id))
         logger.info("Getting predictions for users with fixture_id `{}` in curr_prediction".format(f.fixture_id))
         
         # get user records where current prediction fixture id is the same as the fixture that ended
         users_list = list(User.scan(User.curr_prediction.fixture == f.fixture_id))
-        if len(users_list) > 0:
+        if users_list:
 
             user_list_to_save = []
             scoreline_dict = {}
