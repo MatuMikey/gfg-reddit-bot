@@ -98,6 +98,7 @@ def score_users():
                 u.save()
             return f
 
+
 def is_correct_result(ur, fixture_result):
     actual_result_diff = fixture_result.home_goals - fixture_result.away_goals
     user_result_diff = ur.home_goals - ur.away_goals
@@ -110,9 +111,11 @@ def is_correct_result(ur, fixture_result):
     else:
         return False
 
+
 def is_correct_scoreline(ur, fixture_result):
     if ur.home_goals == fixture_result.home_goals and ur.away_goals == fixture_result.away_goals:
         return True
+
 
 def win_tie(current_user, highest_user, scoreline_dict, scorerpoints_dict, fixture):
     # check if correct scoreline
@@ -126,13 +129,14 @@ def win_tie(current_user, highest_user, scoreline_dict, scorerpoints_dict, fixtu
             elif scorerpoints_dict.get(current_user.user_id,0) == scorerpoints_dict.get(highest_user.user_id,0):
                 # if that is also same, check who got the closest first event
                 if abs(current_user.curr_prediction.result.first_event - fixture.result.first_event) < \
-                    abs(highest_user.curr_prediction.result.first_event - fixture.result.first_event):
+                        abs(highest_user.curr_prediction.result.first_event - fixture.result.first_event):
                     return True
                 elif abs(current_user.curr_prediction.result.first_event - fixture.result.first_event) == \
-                    abs(highest_user.curr_prediction.result.first_event - fixture.result.first_event):
+                        abs(highest_user.curr_prediction.result.first_event - fixture.result.first_event):
                     return current_user.curr_prediction.posted_at < highest_user.curr_prediction.posted_at
     else:
         return False
+
 
 def add_points(u, points, league_id):
     u.curr_prediction.points += points
@@ -154,6 +158,8 @@ def lambda_handler(event, context):
         # change status to FT
         f.save()
         google_sheets.update_sheets(f)
+
+
 if __name__ == "__main__":
     f = score_users()
     if f:
